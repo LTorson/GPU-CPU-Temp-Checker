@@ -34,34 +34,34 @@ namespace HardwareTemperature
             {
                 Console.Clear();
                 Console.WriteLine("{0}\n", DateTime.Now);
-
-                foreach (IHardware hardware in computer.Hardware)
+                // Append text to an existing file named "WriteLines.txt".
+                using (StreamWriter outputFile = new StreamWriter(myFilePath, true))
                 {
-                    hardware.Update();
-
-                    Console.WriteLine("{0}: {1}", hardware.HardwareType, hardware.Name);
-                    double len = 0;
-                    if (File.Exists(myFilePath))
+                    outputFile.WriteLine("================{0}\n================", DateTime.Now);
+                    foreach (IHardware hardware in computer.Hardware)
                     {
-                        new FileInfo(myFilePath).Directory.Create();
-                        len = new FileInfo(myFilePath).Length;
-                    }
+                        hardware.Update();
 
-                    string[] sizes = { "B", "KB", "MB", "GB", "TB" };
-                    int order = 0;
-                    while (len >= 1024 && order < sizes.Length - 1)
-                    {
-                        order++;
-                        len = len / 1024;
-                    }
+                        Console.WriteLine("{0}: {1}", hardware.HardwareType, hardware.Name);
+                        double len = 0;
+                        if (File.Exists(myFilePath))
+                        {
+                            new FileInfo(myFilePath).Directory.Create();
+                            len = new FileInfo(myFilePath).Length;
+                        }
 
-                    // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
-                    // show a single decimal place, and no space.
-                    string result = String.Format("{0:0.##}{1}", len, sizes[order]);
+                        string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+                        int order = 0;
+                        while (len >= 1024 && order < sizes.Length - 1)
+                        {
+                            order++;
+                            len = len / 1024;
+                        }
 
-                    // Append text to an existing file named "WriteLines.txt".
-                    using (StreamWriter outputFile = new StreamWriter(myFilePath, true))
-                    {
+                        // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+                        // show a single decimal place, and no space.
+                        string result = String.Format("{0:0.##}{1}", len, sizes[order]);
+
                         foreach (ISensor sensor in hardware.Sensors)
                         {
                             // Celsius is default unit
@@ -81,8 +81,8 @@ namespace HardwareTemperature
 
                         }
                         outputFile.WriteLine("----------------------------------------------");
+                        Console.WriteLine();
                     }
-                    Console.WriteLine();
                 }
                 Console.WriteLine("Press Enter to exit");
             };
