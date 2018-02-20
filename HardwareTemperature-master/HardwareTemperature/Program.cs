@@ -34,7 +34,7 @@ namespace HardwareTemperature
             {
                 Console.Clear();
                 Console.WriteLine("{0}\n", DateTime.Now);
-                // Append text to an existing file named "WriteLines.txt".
+                // Append text to an existing file.
                 using (StreamWriter outputFile = new StreamWriter(myFilePath, true))
                 {
                     outputFile.WriteLine("================{0}\n================", DateTime.Now);
