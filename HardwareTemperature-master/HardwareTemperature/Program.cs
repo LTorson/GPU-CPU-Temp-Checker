@@ -71,10 +71,12 @@ namespace HardwareTemperature
                                 if (sensor.Value <= 60)
                                 {
                                     outputFile.WriteLine("Within Temperature Range - {0}: {1}°C/{2}°F", sensor.Name, sensor.Value, sensor.Value * 1.8 + 32);
+                                    Console.WriteLine("Within Temperature Range - {0} - {1}°C/{2}°F", sensor.Name, sensor.Value, sensor.Value * 1.8 + 32);
                                     // Console.WriteLine("{0}: {1}°F", sensor.Name, sensor.Value*1.8+32);
                                 }
                                 else
                                 {
+                                    Console.WriteLine("Exceeding Temperature Range - {0} - {1}°C/{2}°F", sensor.Name, sensor.Value, sensor.Value * 1.8 + 32);
                                     outputFile.WriteLine("Exceeding Temperature Range - {0}: {1}°C/{2}°F", sensor.Name, sensor.Value, sensor.Value * 1.8 + 32);
                                 }
                             }
