@@ -11,6 +11,7 @@
 
 using OpenHardwareMonitor.Hardware;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Timers;
 
@@ -25,6 +26,9 @@ namespace HardwareTemperature
             Computer computer = new Computer() { CPUEnabled = true, GPUEnabled = true };
             computer.Open();
 
+            // Set a variable to the File path.
+            string myFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Overclocking.txt";
+
             Timer timer = new Timer() { Enabled = true, Interval = 1000 };
             timer.Elapsed += delegate (object sender, ElapsedEventArgs e)
             {
@@ -36,8 +40,6 @@ namespace HardwareTemperature
                     hardware.Update();
 
                     Console.WriteLine("{0}: {1}", hardware.HardwareType, hardware.Name);
-                    // Set a variable to the My Documents path.
-                    string myFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Overclocking.txt";
                     double len = 0;
                     if (File.Exists(myFilePath))
                     {
@@ -55,7 +57,7 @@ namespace HardwareTemperature
 
                     // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
                     // show a single decimal place, and no space.
-                    string result = String.Format("{0:0.##} {1}", len, sizes[order]);
+                    string result = String.Format("{0:0.##}{1}", len, sizes[order]);
 
                     // Append text to an existing file named "WriteLines.txt".
                     using (StreamWriter outputFile = new StreamWriter(myFilePath, true))
@@ -65,7 +67,7 @@ namespace HardwareTemperature
                             // Celsius is default unit
                             if (sensor.SensorType == SensorType.Temperature)
                             {
-                                Console.WriteLine("File Saved {0} - {1}: {2}°C/{3}°F", result, myFilePath, sensor.Value, sensor.Value * 1.8 + 32);
+                                Console.WriteLine("File {0} (Saved) - {1} - {2}°C/{3}°F", myFilePath, result, sensor.Value, sensor.Value * 1.8 + 32);
                                 if (sensor.Value <= 60)
                                 {
                                     outputFile.WriteLine("Within Temperature Range - {0}: {1}°C/{2}°F", sensor.Name, sensor.Value, sensor.Value * 1.8 + 32);
@@ -86,6 +88,7 @@ namespace HardwareTemperature
             };
             // press enter to exit
             Console.ReadLine();
+            Process.Start(myFilePath);
         }
     }
 }
