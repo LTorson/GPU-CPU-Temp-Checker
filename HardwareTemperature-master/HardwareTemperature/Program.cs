@@ -38,10 +38,14 @@ namespace HardwareTemperature
                     Console.WriteLine("{0}: {1}", hardware.HardwareType, hardware.Name);
                     // Set a variable to the My Documents path.
                     string myFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\Overclocking.txt";
-                    new FileInfo(myFilePath).Directory.Create();
+                    double len = 0;
+                    if (File.Exists(myFilePath))
+                    {
+                        new FileInfo(myFilePath).Directory.Create();
+                        len = new FileInfo(myFilePath).Length;
+                    }
 
                     string[] sizes = { "B", "KB", "MB", "GB", "TB" };
-                    double len = new FileInfo(myFilePath).Length;
                     int order = 0;
                     while (len >= 1024 && order < sizes.Length - 1)
                     {
